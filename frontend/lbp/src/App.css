@@ -1,0 +1,16 @@
+body {
+  font-family: "Gudea", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+P,
+label {
+  font-family: "Rancho", cursive;
+
+  font-weight: 400;
+}
