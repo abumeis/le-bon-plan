@@ -32,6 +32,20 @@ app.post('/signup', async (req, res) => {
     }
 })
 
+app.post('/login', async (req, res) => {
+    const user = new UserModel({
+        username: req.body.username,
+        password: req.body.password,
+    })
+    try {
+        const findUser = await user.findOne()
+        res.json(findUser)
+
+    } catch (err) {
+        res.json({ message: err })
+    }
+})
+
 app.get('/admin', async (req, res) => {
     try {
         const users = await UserModel.find()
