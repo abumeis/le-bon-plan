@@ -15,6 +15,8 @@ const StyleNavBar = styled.div`
 const StyleLink = styled.span`
   color: #fff;
   padding: 10px;
+  font-family: "Rancho", cursive;
+  font-weight: 400;
 `;
 
 class Navbar extends React.Component {
