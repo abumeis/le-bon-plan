@@ -1,146 +1,3 @@
-//import React from "react";
-//import { useHistory } from "react-router-dom";
-//import { Form, Input, Button, Checkbox, Upload } from "antd";
-//import { InboxOutlined } from "@ant-design/icons";
-//import "antd/dist/antd.css";
-//
-//const layout = {
-//  labelCol: {
-//    span: 4,
-//  },
-//  wrapperCol: {
-//    span: 16,
-//  },
-//};
-//const tailLayout = {
-//  wrapperCol: {
-//    offset: 10,
-//    span: 16,
-//  },
-//};
-//
-//const normFile = (e) => {
-//  console.log("Upload event:", e);
-//
-//  if (Array.isArray(e)) {
-//    return e;
-//  }
-//
-//  return e && e.fileList;
-//};
-//
-//export default function Signup() {
-//  let history = useHistory();
-//
-//  const onFinish = async (data) => {
-//    try {
-//      console.log("Success:", data);
-//      const response = await fetch("http://localhost:8000/signup", {
-//        method: "POST",
-//        headers: {
-//          "content-type": "application/json",
-//        },
-//        body: JSON.stringify(data),
-//      });
-//      if (response.ok) {
-//        const tokenObj = await response.json();
-//        localStorage.setItem("token", tokenObj.token);
-//        history.push("/");
-//      }
-//    } catch (error) {
-//      console.error(error);
-//    }
-//  };
-//
-//  const onFinishFailed = (errorInfo) => {
-//    console.log("Failed:", errorInfo);
-//  };
-//
-//  return (
-//    <>
-//      <Form
-//        {...layout}
-//        name="basic"
-//        initialValues={{
-//          remember: true,
-//        }}
-//        onFinish={onFinish}
-//        onFinishFailed={onFinishFailed}
-//      >
-//        <Form.Item
-//          label="Username"
-//          name="username"
-//          rules={[
-//            {
-//              required: true,
-//              message: "Please input your username!",
-//            },
-//          ]}
-//        >
-//          <Input />
-//        </Form.Item>
-//
-//        <Form.Item
-//          label="First-Name"
-//          name="firstName"
-//          rules={[
-//            {
-//              required: true,
-//              message: "Please input your first name!",
-//            },
-//          ]}
-//        >
-//          <Input />
-//        </Form.Item>
-//
-//        <Form.Item
-//          label="Password"
-//          name="password"
-//          rules={[
-//            {
-//              required: true,
-//              message: "Please input your password!",
-//            },
-//          ]}
-//        >
-//          <Input.Password />
-//        </Form.Item>
-//
-//        <Form.Item label="Picture of you">
-//          <Form.Item
-//            name="dragger"
-//            valuePropName="fileList"
-//            getValueFromEvent={normFile}
-//            noStyle
-//          >
-//            <Upload.Dragger name="files" action="/upload.do">
-//              <p className="ant-upload-drag-icon">
-//                <InboxOutlined />
-//              </p>
-//              <p className="ant-upload-text">
-//                Click or drag file to this area to upload
-//              </p>
-//              <p className="ant-upload-hint">
-//                Support for a single or bulk upload.
-//              </p>
-//            </Upload.Dragger>
-//          </Form.Item>
-//        </Form.Item>
-//
-//        <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-//          <Checkbox>Remember me</Checkbox>
-//        </Form.Item>
-//
-//        <Form.Item {...tailLayout}>
-//          <Button type="primary" htmlType="submit">
-//            Submit
-//          </Button>
-//        </Form.Item>
-//      </Form>
-//    </>
-//  );
-//}
-
 import {
   Avatar,
   Button,
@@ -160,10 +17,10 @@ class signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      profilePic: "",
-      firstName: "",
-      surName: "",
-      email: "",
+      profilePicture: "",
+      firstname: "",
+      surname: "",
+      username: "",
       password: "",
       passwordConfirmation: "",
     };
@@ -172,23 +29,23 @@ class signup extends React.Component {
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        this.setState({ profilePic: reader.result[0] });
+        this.setState({ profilePicture: reader.result[0] });
       }
     };
     reader.readAsDataURL(e.target.files[0]);
   };
-  //onChangeProfilePic = (e) => {
-  //  this.setState({ profilePic: e.target.files[0] });
-  //};
+  onChangeProfilePic = (e) => {
+    this.setState({ profilePicture: e.target.files[0] });
+  };
   onChangeFirstName = (e) => {
-    this.setState({ firstName: e.target.value });
+    this.setState({ firstname: e.target.value });
   };
   onChangeSurName = (e) => {
-    this.setState({ surName: e.target.value });
+    this.setState({ surname: e.target.value });
   };
 
-  onChangeEmail = (e) => {
-    this.setState({ email: e.target.value });
+  onChangeUserName = (e) => {
+    this.setState({ username: e.target.value });
   };
   onChangePassword = (e) => {
     this.setState({ password: e.target.value });
@@ -199,17 +56,29 @@ class signup extends React.Component {
 
   onSubmit = () => {
     const formData = new FormData();
-    formData.append("image", this.state.profilePic);
-    formData.append("firstName", this.state.firstName);
-    formData.append("surName", this.state.surName);
-    formData.append("dateOfBirth", this.state.dateOfBirth);
-    formData.append("city", this.state.city);
-    formData.append("email", this.state.email);
+    formData.append("profilePicture", this.state.profilePicture);
+    formData.append("firstname", this.state.firstname);
+    formData.append("surname", this.state.surname);
+    formData.append("username", this.state.username);
     formData.append("password", this.state.password);
     formData.append("passwordConfirmation", this.state.passwordConfirmation);
+    console.log(formData);
     fetch("http://localhost:8000/signup", {
       method: "POST",
-      body: formData,
+      mode: "cors",
+      body: JSON.stringify({
+        username: this.state.username,
+        firstname: this.state.firstname,
+        surname: this.state.surname,
+        password: this.state.password,
+        passwordConfirmation: this.state.passwordConfirmation,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // method: "POST",
+      // headers: { "Content-type": "application/json" },
+      // body: formData,
 
       ///fetch("http://localhost:8000/signup", {
       ///  method: "POST",
@@ -269,7 +138,6 @@ class signup extends React.Component {
             onChange={this.onChangeProfilePic}
           />
 
-
           <TextField
             label="first name"
             placeholder="Enter first name"
@@ -286,12 +154,12 @@ class signup extends React.Component {
             onChange={this.onChangeSurName}
           />
           <TextField
-            label="email"
-            placeholder="email"
+            label="username"
+            placeholder="username"
             fullWidth
             required
-            value={this.state.email}
-            onChange={this.onChangeEmail}
+            value={this.state.username}
+            onChange={this.onChangeUserName}
           />
           <TextField
             label="Password"

@@ -112,13 +112,13 @@ class login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
+      username: "",
       password: "",
     };
   }
 
-  onChangeEmail = (e) => {
-    this.setState({ email: e.target.value });
+  onChangeUserName = (e) => {
+    this.setState({ username: e.target.value });
   };
   z;
   onChangePassword = (e) => {
@@ -130,7 +130,7 @@ class login extends React.Component {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
-        email: this.state.email,
+        username: this.state.username,
         password: this.state.password,
       }),
     })
@@ -171,12 +171,12 @@ class login extends React.Component {
             <h2>Login</h2>
           </Grid>
           <TextField
-            label="Email"
-            placeholder="Enter your Email"
+            label="Username"
+            placeholder="Enter your Username"
             fullWidth
             required
-            value={this.state.email}
-            onChange={this.onChangeEmail}
+            value={this.state.username}
+            onChange={this.onChangeUserName}
           />
           <TextField
             label="Password"

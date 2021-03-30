@@ -17,6 +17,7 @@ mongoose.connect('mongodb://localhost:27017/lebonplan',
     });
 
 app.post('/signup', async (req, res) => {
+    console.log(req.body)
     const user = new UserModel({
         username: req.body.username,
         password: req.body.password,
