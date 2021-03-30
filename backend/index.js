@@ -4,7 +4,8 @@ const port = 8000;
 const mongoose = require('mongoose');
 const cors = require('cors');
 const UserModel = require("./models/User");
-
+const {generateToken} = require('./utils/token')
+const checkAuth = require ('./middlewares/AuthToken')
 
 app.use(express.json());
 app.use(cors())
@@ -25,7 +26,8 @@ app.post('/signup', async (req, res) => {
     })
     try {
         const saveUser = await user.save()
-        res.json(saveUser)
+        const token = generateToken(user.username)
+        res.send({token}).json(saveUser)
 
     } catch (err) {
         res.json({ message: err })
@@ -33,22 +35,46 @@ app.post('/signup', async (req, res) => {
 })
 
 app.post('/login', async (req, res) => {
-    const user = new UserModel({
-        username: req.body.username,
-        password: req.body.password,
-    })
-    try {
-        const findUser = await user.findOne()
-        res.json(findUser)
-
+    try{
+        const body = req.body
+        const user = await UserModel.findOne({
+            username: body.username
+        })
+        if (!user) {
+            return res.status(404).send("The user was not found")
+        }
+        if (user.password !== body.password) {
+            return res.status(401).json("Password invalid")
+        }
+        const token = generateToken(user.username);
+        return res.json({
+            token,
+            isConnected: true
+        })
     } catch (err) {
-        res.json({ message: err })
+        console.error(err)
+        res.status(404).json({
+            isConnected: false
+        })
     }
 })
 
-app.get('/admin', async (req, res) => {
+    // const user = new UserModel({
+    //     username: req.body.username,
+    //     password: req.body.password,
+    // })
+    // try {
+    //     const findUser = await user.findOne()
+    //     res.json(findUser)
+
+    // } catch (err) {
+    //     res.json({ message: err })
+    // }
+
+
+app.get('/admin', checkAuth, async (req, res) => {
     try {
-        const users = await UserModel.find()
+        const users = await UserModel.find({})
         res.json(users)
 
     } catch (err) {
@@ -57,4 +83,6 @@ app.get('/admin', async (req, res) => {
 })
 
 
-app.listen(port);
+app.listen(port, () => {
+    console.log("server launch")
+});

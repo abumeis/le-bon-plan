@@ -82,7 +82,7 @@ export default function Signup() {
 
         <Form.Item
           label="First-Name"
-          name="firstName"
+          name="firstname"
           rules={[
             {
               required: true,
@@ -108,7 +108,7 @@ export default function Signup() {
 
         <Form.Item label="Picture of you">
           <Form.Item
-            name="dragger"
+            name="profilPicture"
             valuePropName="fileList"
             getValueFromEvent={normFile}
             noStyle
