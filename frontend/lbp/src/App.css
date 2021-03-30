@@ -9,8 +9,13 @@ h4,
 h5,
 h6,
 P,
+li,
 label {
   font-family: "Rancho", cursive;
 
   font-weight: 400;
+}
+.navbar {
+  padding: 0;
+  background: linear-gradient(0.25turn, #eb8817, #e61616, #f69d3c);
 }
