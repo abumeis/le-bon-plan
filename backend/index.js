@@ -4,6 +4,8 @@ const port = 8000;
 const mongoose = require('mongoose');
 const cors = require('cors');
 const UserModel = require("./models/User");
+const ProductModel = require("./models/User");
+
 const { generateToken } = require('./utils/token')
 const checkAuth = require('./middlewares/AuthToken')
 const { body, validationResult } = require('express-validator');
@@ -32,26 +34,26 @@ app.post('/signup', body('password').custom((value) => {
         .is().not().oneOf(["Passw0rd", "Password123"]);
     return schema.validate(value);
 }),
-async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-    const user = new UserModel({
-        username: req.body.username,
-        password: bcrypt.hashSync(req.body.password),
-        firstname: req.body.firstname,
-        surname: req.body.surname,
-        profilePicture: req.body.profilePicture
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        const user = new UserModel({
+            username: req.body.username,
+            password: bcrypt.hashSync(req.body.password),
+            firstname: req.body.firstname,
+            surname: req.body.surname,
+            profilePicture: req.body.profilePicture
+        })
+        try {
+            const saveUser = await user.save()
+            const token = generateToken(user.username)
+            res.send({ token }).json(saveUser)
+        } catch (err) {
+            res.json({ message: err })
+        }
     })
-    try {
-        const saveUser = await user.save()
-        const token = generateToken(user.username)
-        res.send({ token }).json(saveUser)
-    } catch (err) {
-        res.json({ message: err })
-    }
-})
 
 app.post('/login', async (req, res) => {
     try {
