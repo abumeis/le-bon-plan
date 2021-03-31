@@ -7,6 +7,8 @@ const UserModel = require("./models/User");
 const ProductModel = require("./models/Product");
 const { generateToken } = require('./utils/token')
 const checkAuth = require('./middlewares/AuthToken')
+const { body, validationResult } = require('express-validator');
+const passwordValidator = require('password-validator');
 
 app.use(express.json());
 app.use(cors())
@@ -21,9 +23,24 @@ mongoose.connect('mongodb://localhost:27017/lebonplan',
 
 
 
-app.post('/signup', async (req, res) => {
+app.post('/signup', body('password').custom((value) => {
+    var schema = new passwordValidator();
+    schema
+        .is().min(8)
+        .is().max(100)
+        .has().uppercase()
+        .has().lowercase()
+        .has().digits(2)
+        .has().not().spaces()
+        .is().not().oneOf(["Passw0rd", "Password123"]);
+    return schema.validate(value);
+}), async (req, res) => {
 
     console.log(req.body)
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     const user = new UserModel({
         username: req.body.username,
         password: req.body.password,
