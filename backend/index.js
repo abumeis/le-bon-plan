@@ -103,6 +103,22 @@ app.get('/admin', checkAuth, async (req, res) => {
     }
 })
 
+app.post('/product/:id', async (req, res) => {
+    const product = new ProductModel({
+        name: req.body.name,
+        price: req.body.price,
+        Description: req.body.Description,
+        productPicture: req.body.productPicture
+    })
+    try {
+        const products = await product.save()
+        res.json(products)
+
+    } catch (err) {
+        res.json({ message: err })
+    }
+})
+
 
 app.listen(port, () => {
     console.log("server launch")
