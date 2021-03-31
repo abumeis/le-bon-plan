@@ -4,6 +4,7 @@ const port = 8000;
 const mongoose = require('mongoose');
 const cors = require('cors');
 const UserModel = require("./models/User");
+const ProductModel = require("./models/Product");
 const {generateToken} = require('./utils/token')
 const checkAuth = require ('./middlewares/AuthToken')
 const multer = require("multer");
@@ -95,6 +96,22 @@ app.get('/admin', checkAuth, async (req, res) => {
         res.status(403).json({
             isConnected: false
         })
+    }
+})
+
+app.post('/product', async (req, res) => {
+    const product = new ProductModel({
+        name: req.body.name,
+        price: req.body.price,
+        Description: req.body.Description,
+        productPicture: req.body.productPicture
+    })
+    try {
+        const products = await product.save()
+        res.json(products)
+
+    } catch (err) {
+        res.json({ message: err })
     }
 })
 
