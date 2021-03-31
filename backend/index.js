@@ -7,6 +7,8 @@ const UserModel = require("./models/User");
 const { generateToken } = require('./utils/token')
 const checkAuth = require('./middlewares/AuthToken')
 const { body, validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+
 
 
 app.use(express.json());
@@ -33,7 +35,7 @@ app.post('/signup', body('password').custom((value) => {
     console.log(req.body)
     const user = new UserModel({
         username: req.body.username,
-        password: req.body.password,
+        password: bcrypt.hashSync(req.body.password),
         firstname: req.body.firstname,
         surname: req.body.surname,
         profilePicture: req.body.profilePicture
