@@ -4,8 +4,10 @@ const port = 8000;
 const mongoose = require('mongoose');
 const cors = require('cors');
 const UserModel = require("./models/User");
-const {generateToken} = require('./utils/token')
-const checkAuth = require ('./middlewares/AuthToken')
+const { generateToken } = require('./utils/token')
+const checkAuth = require('./middlewares/AuthToken')
+const { body, validationResult } = require('express-validator');
+
 
 app.use(express.json());
 app.use(cors())
@@ -16,7 +18,18 @@ mongoose.connect('mongodb://localhost:27017/lebonplan',
         console.log("db connect........");
     });
 
-app.post('/signup', async (req, res) => {
+app.post('/signup', body('password').custom((value) => {
+    var schema = new passwordValidator();
+    schema
+        .is().min(8)
+        .is().max(100)
+        .has().uppercase()
+        .has().lowercase()
+        .has().digits(2)
+        .has().not().spaces()
+        .is().not().oneOf(["Passw0rd", "Password123"]);
+    return schema.validate(value);
+}), async (req, res) => {
     console.log(req.body)
     const user = new UserModel({
         username: req.body.username,
@@ -28,7 +41,7 @@ app.post('/signup', async (req, res) => {
     try {
         const saveUser = await user.save()
         const token = generateToken(user.username)
-        res.send({token}).json(saveUser)
+        res.send({ token }).json(saveUser)
 
     } catch (err) {
         res.json({ message: err })
@@ -36,7 +49,7 @@ app.post('/signup', async (req, res) => {
 })
 
 app.post('/login', async (req, res) => {
-    try{
+    try {
         const body = req.body
         const user = await UserModel.findOne({
             username: body.username
@@ -60,17 +73,17 @@ app.post('/login', async (req, res) => {
     }
 })
 
-    // const user = new UserModel({
-    //     username: req.body.username,
-    //     password: req.body.password,
-    // })
-    // try {
-    //     const findUser = await user.findOne()
-    //     res.json(findUser)
+// const user = new UserModel({
+//     username: req.body.username,
+//     password: req.body.password,
+// })
+// try {
+//     const findUser = await user.findOne()
+//     res.json(findUser)
 
-    // } catch (err) {
-    //     res.json({ message: err })
-    // }
+// } catch (err) {
+//     res.json({ message: err })
+// }
 
 
 app.get('/admin', checkAuth, async (req, res) => {
