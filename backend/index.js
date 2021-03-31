@@ -31,8 +31,12 @@ app.post('/signup', body('password').custom((value) => {
         .has().not().spaces()
         .is().not().oneOf(["Passw0rd", "Password123"]);
     return schema.validate(value);
-}), async (req, res) => {
-    console.log(req.body)
+}),
+async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     const user = new UserModel({
         username: req.body.username,
         password: bcrypt.hashSync(req.body.password),
@@ -44,7 +48,6 @@ app.post('/signup', body('password').custom((value) => {
         const saveUser = await user.save()
         const token = generateToken(user.username)
         res.send({ token }).json(saveUser)
-
     } catch (err) {
         res.json({ message: err })
     }
