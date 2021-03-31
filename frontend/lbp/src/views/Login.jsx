@@ -139,7 +139,9 @@ class login extends React.Component {
       })
       .then((response) => {
         localStorage.setItem("token", response.token);
-        this.props.history.push("/Home");
+        if (response.isConnected !== false) {
+          this.props.history.push("/profile");
+        }
       })
       .catch((error) => {
         console.log(error);

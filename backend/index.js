@@ -6,9 +6,11 @@ const cors = require('cors');
 const UserModel = require("./models/User");
 const {generateToken} = require('./utils/token')
 const checkAuth = require ('./middlewares/AuthToken')
+const multer = require("multer");
 
 app.use(express.json());
 app.use(cors())
+
 
 mongoose.connect('mongodb://localhost:27017/lebonplan',
     { useNewUrlParser: true, useUnifiedTopology: true },
@@ -16,14 +18,19 @@ mongoose.connect('mongodb://localhost:27017/lebonplan',
         console.log("db connect........");
     });
 
+
+
+
 app.post('/signup', async (req, res) => {
+   
     console.log(req.body)
     const user = new UserModel({
         username: req.body.username,
         password: req.body.password,
         firstname: req.body.firstname,
         surname: req.body.surname,
-        profilePicture: req.body.profilePicture
+        profilePicture: req.body.profilePicture,
+        //`/userPic/${req.body.surname}.png`
     })
     try {
         const saveUser = await user.save()
@@ -35,6 +42,9 @@ app.post('/signup', async (req, res) => {
     }
 })
 
+
+
+
 app.post('/login', async (req, res) => {
     try{
         const body = req.body
@@ -45,7 +55,9 @@ app.post('/login', async (req, res) => {
             return res.status(404).send("The user was not found")
         }
         if (user.password !== body.password) {
-            return res.status(401).json("Password invalid")
+            return res.status(404).json({
+            isConnected: false
+        })
         }
         const token = generateToken(user.username);
         return res.json({
@@ -78,8 +90,11 @@ app.get('/admin', checkAuth, async (req, res) => {
         const users = await UserModel.find({})
         res.json(users)
 
-    } catch (err) {
-        res.json({ message: err })
+    }  catch (err) {
+        console.error(err)
+        res.status(403).json({
+            isConnected: false
+        })
     }
 })
 

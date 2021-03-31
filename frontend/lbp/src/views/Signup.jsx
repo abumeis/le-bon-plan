@@ -56,7 +56,7 @@ class signup extends React.Component {
 
   onSubmit = () => {
     const formData = new FormData();
-    formData.append("profilePicture", this.state.profilePicture);
+    formData.append("image", this.state.profilePicture);
     formData.append("firstname", this.state.firstname);
     formData.append("surname", this.state.surname);
     formData.append("username", this.state.username);
