@@ -7,7 +7,6 @@ const UserModel = require("./models/User");
 const ProductModel = require("./models/Product");
 const { generateToken } = require('./utils/token')
 const checkAuth = require('./middlewares/AuthToken')
-const multer = require("multer");
 
 app.use(express.json());
 app.use(cors())
@@ -101,7 +100,7 @@ app.get('/admin', checkAuth, async (req, res) => {
 
 app.post('/product', async (req, res) => {
     const product = new ProductModel({
-        creator: _id ,
+        // creator: _id ,
         name: req.body.name,
         price: req.body.price,
         Description: req.body.Description,
@@ -118,7 +117,10 @@ app.post('/product', async (req, res) => {
 
 app.get('/products/:id', async (req, res) => {
     try {
-        const product = await ProductModel.findById()        
+        const product = await ProductModel.findById(
+            req.params.id,
+            req.body
+        )
         res.json(product)
 
     } catch (err) {
