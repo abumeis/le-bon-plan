@@ -41,9 +41,10 @@ class AddProduct extends Component {
       }),
     })
       .then((response) => {
-        this.props.history.push("/products");
-
         return response.json();
+      })
+      .then((response) => {
+        this.props.history.push(`/products/${response._id}`);
       })
       .catch((error) => {
         console.log(error);

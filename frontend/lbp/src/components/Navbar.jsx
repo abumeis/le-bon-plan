@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import Home from "../views/Home";
 import Products from "../views/Products";
+import Product from "../views/Product";
 import Error404 from "../views/Error404";
 import AddProduct from "../views/AddProduct";
 import Login from "../views/Login";
@@ -87,6 +88,7 @@ class Navbar extends React.Component {
           </Route>
           <Route path="/Products">
             <Products />
+            <Route path="/products/:id" component={Product}></Route>
           </Route>
           <Route path="/AddProduct">
             <AddProduct />

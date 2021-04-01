@@ -1,7 +1,6 @@
 import React from "react";
 // import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import Produitcard from "../components/Produitcard";
-import { Link } from "react-router-dom";
 
 class Products extends React.Component {
   constructor(props) {
@@ -13,7 +12,7 @@ class Products extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:3002/product:id")
+    fetch("http://localhost:8000/products")
       .then((response) => response.json())
       .then((response) => {
         this.setState({
@@ -30,14 +29,12 @@ class Products extends React.Component {
         <div>
           {this.state.products.map((product) => {
             return (
-              <Link to={`/product/${product._id}`}>
-                <Produitcard
-                  productPicture={product.productPicture}
-                  name={product.name}
-                  Description={product.Description}
-                  price={product.price}
-                ></Produitcard>
-              </Link>
+              <Produitcard
+                productPicture={product.productPicture}
+                name={product.name}
+                Description={product.Description}
+                price={product.price}
+              ></Produitcard>
             );
           })}
         </div>
