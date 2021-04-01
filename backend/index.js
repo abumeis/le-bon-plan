@@ -125,6 +125,7 @@ app.get('/products/:id', async (req, res) => {
 
     } catch (err) {
         res.json({ message: err })
+        
     }
 })
 

@@ -1,8 +1,9 @@
 import React from "react";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import Home from "../views/Home";
-import Cities from "../views/Cities";
+import Products from "../views/Products";
 import Error404 from "../views/Error404";
+import AddProduct from "../views/AddProduct";
 import Login from "../views/Login";
 import Signup from "../views/Signup";
 import Profile from "../views/Profile";
@@ -41,7 +42,6 @@ class Navbar extends React.Component {
             >
               <span className="navbar-toggler-icon"></span>
             </button>
-
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav">
                 <li className="nav-item">
@@ -49,10 +49,14 @@ class Navbar extends React.Component {
                     <StyleLink>Home</StyleLink>
                   </Link>
                 </li>
-
                 <li className="nav-item">
-                  <Link className="nav-link active" to="/Cities">
-                    <StyleLink>Cities</StyleLink>
+                  <Link className="nav-link active" to="/AddProduct">
+                    <StyleLink>Add product</StyleLink>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link active" to="/Products">
+                    <StyleLink>Products</StyleLink>
                   </Link>
                 </li>
 
@@ -81,8 +85,11 @@ class Navbar extends React.Component {
           <Route path="/Home">
             <Home />
           </Route>
-          <Route path="/Cities">
-            <Cities />
+          <Route path="/Products">
+            <Products />
+          </Route>
+          <Route path="/AddProduct">
+            <AddProduct />
           </Route>
           <Route path="/Profile">
             <Profile />

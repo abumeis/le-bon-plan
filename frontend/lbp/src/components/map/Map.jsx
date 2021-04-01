@@ -21,7 +21,7 @@ class Map extends Component {
             </li>
           </ol>
         </div>
-        <div className="image  ">
+        <div className="image">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             xmlnsAmcharts="http://amcharts.com/ammap"
