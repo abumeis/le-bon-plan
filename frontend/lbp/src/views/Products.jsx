@@ -13,7 +13,7 @@ class Products extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`http://localhost:3002/products`)
+    fetch("http://localhost:3002/product:id")
       .then((response) => response.json())
       .then((response) => {
         this.setState({

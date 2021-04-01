@@ -132,7 +132,7 @@ app.post('/product', async (req, res) => {
     }
 })
 
-app.get('/products/:id', async (req, res) => {
+app.get('/product/:id', async (req, res) => {
     try {
         const product = await ProductModel.findById(
             req.params.id,

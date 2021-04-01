@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
 class AddProduct extends Component {
   constructor(props) {
@@ -40,6 +41,8 @@ class AddProduct extends Component {
       }),
     })
       .then((response) => {
+        this.props.history.push("/products");
+
         return response.json();
       })
       .catch((error) => {
@@ -125,4 +128,4 @@ class AddProduct extends Component {
   }
 }
 
-export default AddProduct;
+export default withRouter(AddProduct);
